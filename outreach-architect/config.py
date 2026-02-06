@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     """Application settings"""
     
     # API Keys
-    kimi_api_key: str = Field(..., env="KIMI_API_KEY")
+    kimi_api_key: Optional[str] = Field(None, env="KIMI_API_KEY")
     kimi_base_url: str = Field(
         default="https://api.moonshot.cn/v1",
         env="KIMI_BASE_URL"
@@ -18,6 +18,16 @@ class Settings(BaseSettings):
     kimi_model: str = Field(
         default="moonshot-v1-128k",
         env="KIMI_MODEL"
+    )
+
+    deepseek_api_key: Optional[str] = Field(None, env="DEEPSEEK_API_KEY")
+    deepseek_base_url: str = Field(
+        default="https://api.deepseek.com",
+        env="DEEPSEEK_BASE_URL"
+    )
+    deepseek_model: str = Field(
+        default="deepseek-chat",
+        env="DEEPSEEK_MODEL"
     )
     
     # Database

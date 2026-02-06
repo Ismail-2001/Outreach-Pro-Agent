@@ -22,12 +22,22 @@ class KimiAgent:
     """
     
     def __init__(self):
-        self.client = OpenAI(
-            api_key=settings.kimi_api_key,
-            base_url=settings.kimi_base_url
-        )
-        self.model = settings.kimi_model
-        
+        # Prioritize DeepSeek if available, otherwise fallback to Kimi
+        if settings.deepseek_api_key:
+            logger.info("Initializing Agent with DeepSeek engine")
+            self.client = OpenAI(
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url
+            )
+            self.model = settings.deepseek_model
+        else:
+            logger.info("Initializing Agent with Kimi engine")
+            self.client = OpenAI(
+                api_key=settings.kimi_api_key,
+                base_url=settings.kimi_base_url
+            )
+            self.model = settings.kimi_model
+
     def _call_kimi(
         self,
         messages: List[Dict[str, str]],
@@ -35,11 +45,13 @@ class KimiAgent:
         max_tokens: int = 4000,
         tools: Optional[List[Dict]] = None
     ) -> Dict[str, Any]:
-        """Call Kimi API with retry logic. Mocks responses for demo keys."""
+        """Call AI API with retry logic. Mocks responses for demo keys."""
         
         # Check for demo/empty key and return mock response
-        if not settings.kimi_api_key or "test-key" in settings.kimi_api_key:
-            logger.info("Using MOCK Kimi response for demo purposes")
+        # Using a unified check for both keys
+        api_key = settings.deepseek_api_key or settings.kimi_api_key
+        if not api_key or "test-key" in api_key:
+            logger.info("Using MOCK AI response for demo purposes")
             return self._get_mock_response(messages)
             
         try:
