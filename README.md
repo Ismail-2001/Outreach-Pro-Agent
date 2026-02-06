@@ -147,4 +147,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-*Built with ❤️ by the Outreach Architect Team*
+*Built with ❤️ by the Ismail Sajid*
